@@ -1,4 +1,15 @@
+data "aws_vpc" "base_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["Base VPC"]
+  }
+}
+
 data "aws_subnet" "private_subnet_1" {
+  filter {
+    name   = "vpc_id"
+    values = [data.aws_vpc.base_vpc.id]
+  }
   filter {
     name   = "tag:Name"
     values = ["PrivateSubnet1"]
@@ -7,14 +18,11 @@ data "aws_subnet" "private_subnet_1" {
 
 data "aws_subnet" "private_subnet_2" {
   filter {
-    name   = "tag:Name"
-    values = ["PrivateSubnet2"]
+    name   = "vpc_id"
+    values = [data.aws_vpc.base_vpc.id]
   }
-}
-
-data "aws_vpc" "base_vpc" {
   filter {
     name   = "tag:Name"
-    values = ["Base VPC"]
+    values = ["PrivateSubnet2"]
   }
 }
